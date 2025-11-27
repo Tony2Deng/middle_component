@@ -4,35 +4,35 @@ spring:
     username: root
     password: Osborn@123
     driver-class-name: com.mysql.cj.jdbc.Driver
-#    type: com.alibaba.druid.pool.DruidDataSource
-#    druid:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
 #      url: jdbc:mysql://192.168.31.111:30001/appdb?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
 #      username: service
 #      password: Osborn@123
 #      driver-class-name: com.mysql.cj.jdbc.Driver
-#      # Druid 连接池配置（核心，按需调整）
-#      initial-size: 5 # 初始化连接数
-#      min-idle: 5 # 最小空闲连接数
-#      max-active: 20 # 最大活跃连接数
-#      max-wait: 60000 # 获取连接的最大等待时间（毫秒）
-#      time-between-eviction-runs-millis: 60000 # 检测空闲连接的间隔时间
-#      min-evictable-idle-time-millis: 300000 # 空闲连接的最小存活时间
-#      validation-query: SELECT 1 FROM DUAL # 验证连接是否有效
-#      test-while-idle: true # 空闲时验证连接
-#      test-on-borrow: false # 获取连接时不验证（提升性能）
-#      test-on-return: false # 归还连接时不验证
-#      pool-prepared-statements: true # 开启PSCache
-#      max-pool-prepared-statement-per-connection-size: 20 # PSCache大小
-#      # Druid 监控配置（可选，开启后可访问 /druid/index.html）
-#      stat-view-servlet:
-#        enabled: true # 开启监控页面
-#        login-username: admin # 监控页面登录账号
-#        login-password: 123456 # 监控页面登录密码
-#        allow: 127.0.0.1 # 允许访问的IP（* 表示所有）
-#      web-stat-filter:
-#        enabled: true # 开启Web监控
-#        url-pattern: /* # 监控所有URL
-#        exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*" # 排除监控的URL
+      # Druid 连接池配置（核心，按需调整）
+      initial-size: 5 # 初始化连接数
+      min-idle: 5 # 最小空闲连接数
+      max-active: 20 # 最大活跃连接数
+      max-wait: 60000 # 获取连接的最大等待时间（毫秒）
+      time-between-eviction-runs-millis: 60000 # 检测空闲连接的间隔时间
+      min-evictable-idle-time-millis: 300000 # 空闲连接的最小存活时间
+      validation-query: SELECT 1 FROM DUAL # 验证连接是否有效
+      test-while-idle: true # 空闲时验证连接
+      test-on-borrow: false # 获取连接时不验证（提升性能）
+      test-on-return: false # 归还连接时不验证
+      pool-prepared-statements: true # 开启PSCache
+      max-pool-prepared-statement-per-connection-size: 20 # PSCache大小
+      # Druid 监控配置（可选，开启后可访问 /druid/index.html）
+      stat-view-servlet:
+        enabled: true # 开启监控页面
+        login-username: admin # 监控页面登录账号
+        login-password: 123456 # 监控页面登录密码
+        allow: 127.0.0.1 # 允许访问的IP（* 表示所有）
+      web-stat-filter:
+        enabled: true # 开启Web监控
+        url-pattern: /* # 监控所有URL
+        exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*" # 排除监控的URL
 
 mybatis-plus:
   # Mapper XML 文件路径（若无需XML可省略）
