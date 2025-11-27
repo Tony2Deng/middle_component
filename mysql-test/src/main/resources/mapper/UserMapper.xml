@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 命名空间：对应Mapper接口的全路径（需替换为实际接口路径） -->
+<mapper namespace="org.example.mapper.UserMapper">
+
+    <!-- 结果映射：数据库字段 → Java实体类属性（需匹配实际实体类属性名） -->
+    <resultMap id="BaseResultMap" type="org.example.entity.User">
+        <!-- id：主键映射 -->
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <!-- 普通字段映射（注意数据类型对应：bit(1)对应Java的Boolean） -->
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="age" property="age" jdbcType="INTEGER"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+        <result column="email" property="email" jdbcType="VARCHAR"/>
+        <result column="gender" property="gender" jdbcType="BIT" javaType="java.lang.Byte"/>
+    </resultMap>
+
+    <!-- 1. 新增（插入）数据（id为自增，无需传入） -->
+    <insert id="insert" parameterType="org.example.entity.User" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO User (
+            name, age, address, email, gender
+        ) VALUES (
+                     #{name,jdbcType=VARCHAR},
+                     #{age,jdbcType=INTEGER},
+                     #{address,jdbcType=VARCHAR},
+                     #{email,jdbcType=VARCHAR},
+                     #{gender,jdbcType=BIT}
+                 )
+    </insert>
+
+    <!-- 2. 根据主键id查询单条数据 -->
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        SELECT id, name, age, address, email, gender
+        FROM User
+        WHERE id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <!-- 3. 选择性更新（仅更新非NULL的字段） -->
+    <update id="updateByPrimaryKeySelective" parameterType="org.example.entity.User">
+        UPDATE User
+        <set>
+            <if test="name != null">name = #{name,jdbcType=VARCHAR},</if>
+            <if test="age != null">age = #{age,jdbcType=INTEGER},</if>
+            <if test="address != null">address = #{address,jdbcType=VARCHAR},</if>
+            <if test="email != null">email = #{email,jdbcType=VARCHAR},</if>
+            <if test="gender != null">gender = #{gender,jdbcType=BIT},</if>
+        </set>
+        WHERE id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <!-- 4. 根据主键id删除数据 -->
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        DELETE FROM User
+        WHERE id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <!-- 5. 查询所有数据（可选） -->
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT id, name, age, address, email, gender
+        FROM User
+    </select>
+
+</mapper>
