@@ -1,17 +1,38 @@
 package org.example;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-public class Main {
-    public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.Resource;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
-        }
+@SpringBootApplication
+public class Main {
+    @Resource(name = "stringRedisTemplate")
+    private StringRedisTemplate stringRedisTemplate;
+
+    @Resource(name = "redisTemplate")
+    private RedisTemplate redisTemplate;
+
+    public static void main(String[] args) {
+        SpringApplication.run(Main.class, args);
+    }
+
+    @PostConstruct
+    public void test() {
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        stringRedisTemplate.opsForValue().set("test", "tony");
+        String s = stringRedisTemplate.opsForValue().get("test");
+        System.out.println(s);
+        stringRedisTemplate.delete("test");
+
+        stringRedisTemplate.opsForList().leftPush("msg:queue", "消息1");
+        stringRedisTemplate.opsForList().leftPush("msg:queue", "消息2");
+        s = stringRedisTemplate.opsForList().rightPop("msg:queue");
+        System.out.println("list pop" + s);
+        s =stringRedisTemplate.opsForList().rightPop("msg:queue");
+        System.out.println("list pop" + s);
+        stringRedisTemplate.delete("msg:queue");
     }
 }

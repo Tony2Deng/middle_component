@@ -25,11 +25,12 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.verison>1</spring.verison>
-        <spring.boot.verison>1</spring.boot.verison>
+        <spring.boot.verison>3.2.7</spring.boot.verison>
         <mybatis.version>3.5.9</mybatis.version>
         <druid.version>1.2.20</druid.version>
         <kafka.version>1</kafka.version>
         <redis.version>1</redis.version>
+        <jacksion.verison>2.15.2</jacksion.verison>
     </properties>
 
     <dependencyManagement>
@@ -60,6 +61,22 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jacksion.verison}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>${jacksion.verison}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jacksion.verison}</version>
         </dependency>
 
     </dependencies>
