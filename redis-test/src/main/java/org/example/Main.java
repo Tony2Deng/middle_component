@@ -7,6 +7,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
+import java.util.HashMap;
+
 @SpringBootApplication
 public class Main {
     @Resource(name = "stringRedisTemplate")
@@ -34,5 +36,13 @@ public class Main {
         s =stringRedisTemplate.opsForList().rightPop("msg:queue");
         System.out.println("list pop" + s);
         stringRedisTemplate.delete("msg:queue");
+
+        HashMap<String, String> stringStringHashMap = new HashMap<>();
+        stringStringHashMap.put("key1", "value1");
+        stringStringHashMap.put("key2", "value2");
+        redisTemplate.opsForValue().set("name", stringStringHashMap);
+        Object name = redisTemplate.opsForValue().get("name");
+        System.out.println(name);
+        stringRedisTemplate.delete("name");
     }
 }
