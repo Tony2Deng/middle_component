@@ -10,6 +10,8 @@ import org.example.service.RedisDistributedLockService;
 
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @SpringBootApplication
 public class Main {
@@ -50,18 +52,37 @@ public class Main {
         System.out.println(name);
         stringRedisTemplate.delete("name");
 
-        // Simple demo for distributed lock
+        // Multi-thread demo for distributed lock
         String lockKey = "demo:lock";
-        String ownerId = UUID.randomUUID().toString();
-        boolean locked = redisDistributedLockService.tryLock(lockKey, ownerId, 10000);
-        System.out.println("acquire lock result: " + locked);
-        if (locked) {
-            try {
-                System.out.println("do business logic under distributed lock");
-            } finally {
-                boolean unlocked = redisDistributedLockService.unlock(lockKey, ownerId);
-                System.out.println("release lock result: " + unlocked);
-            }
+        ExecutorService executorService = Executors.newFixedThreadPool(5);
+        for (int i = 0; i < 5; i++) {
+            int index = i;
+            executorService.submit(() -> {
+                String ownerId = "thread-" + index + "-" + UUID.randomUUID();
+                System.out.println(ownerId + " start to acquire lock");
+                boolean locked = redisDistributedLockService.lockWithRetry(
+                        lockKey,
+                        ownerId,
+                        5000,
+                        200,
+                        20000
+                );
+                System.out.println(ownerId + " acquire lock result: " + locked);
+                if (locked) {
+                    try {
+                        System.out.println(ownerId + " is doing business logic");
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                        }
+                    } finally {
+                        boolean unlocked = redisDistributedLockService.unlock(lockKey, ownerId);
+                        System.out.println(ownerId + " release lock result: " + unlocked);
+                    }
+                }
+            });
         }
+        executorService.shutdown();
     }
 }
