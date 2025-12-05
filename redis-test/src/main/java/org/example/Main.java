@@ -6,8 +6,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.example.service.RedisDistributedLockService;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 @SpringBootApplication
 public class Main {
@@ -16,6 +18,9 @@ public class Main {
 
     @Resource(name = "redisTemplate")
     private RedisTemplate redisTemplate;
+
+    @Resource
+    private RedisDistributedLockService redisDistributedLockService;
 
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
@@ -44,5 +49,19 @@ public class Main {
         Object name = redisTemplate.opsForValue().get("name");
         System.out.println(name);
         stringRedisTemplate.delete("name");
+
+        // Simple demo for distributed lock
+        String lockKey = "demo:lock";
+        String ownerId = UUID.randomUUID().toString();
+        boolean locked = redisDistributedLockService.tryLock(lockKey, ownerId, 10000);
+        System.out.println("acquire lock result: " + locked);
+        if (locked) {
+            try {
+                System.out.println("do business logic under distributed lock");
+            } finally {
+                boolean unlocked = redisDistributedLockService.unlock(lockKey, ownerId);
+                System.out.println("release lock result: " + unlocked);
+            }
+        }
     }
 }
